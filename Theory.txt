@@ -1,0 +1,542 @@
+ Practical No: 01
+Aim : A client server TCP based chatting application.
+Code:
+1. ChatServer.java
+import java.net.*; import
+java.io.*; class ChatServer
+{ public static void main(String args[])
+{
+try
+{
+ServerSocket ss = new ServerSocket(8000);
+System.out.println("Waiting for client to connect.."); Socket s =
+ss.accept();
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+DataOutputStream out = new DataOutputStream(s.getOutputStream());
+DataInputStream in = new DataInputStream(s.getInputStream()); String
+receive, send; while((receive = in.readLine()) != null)
+{
+if(receive.equals("STOP")) break;
+System.out.println("Client Says : "+receive);
+System.out.print("Server Says : "); send =
+br.readLine(); out.writeBytes(send+"\n");
+} br.close();
+in.close(); out.close();
+s.close(); }
+catch(Exception e)
+{
+e.printStackTrace();
+}
+}
+}
+2. ChatClient.java
+
+ import java.net.*; import
+java.io.*; class ChatClient
+{ public static void main(String args[])
+{ try {
+Socket s = new Socket("Localhost",8000);
+BufferedReader br = new BufferedReader(new
+
+InputStreamReader(System.in));
+DataOutputStream out = new DataOutputStream(s.getOutputStream());
+DataInputStream in = new DataInputStream(s.getInputStream()); String msg;
+System.out.println("To stop chatting with server type STOP");
+System.out.print("Client Says: "); while((msg = br.readLine()) != null)
+{ out.writeBytes(msg+"\n");
+if(msg.equals("STOP")) break;
+System.out.println("Server Says : "+in.readLine());
+System.out.print("Client Says : ");
+} br.close();
+in.close(); out.close();
+s.close(); }
+catch(Exception e)
+{
+e.printStackTrace();
+}
+}
+}
+Output:
+Server:
+
+Client:
+
+Client:
+
+ Practical No: 02
+Aim: Write a program to show the object communication using RMI.
+Practical 2A: A RMI based application program to display current date and time.
+Code:
+1.
+InterDate.java
+import java.rmi.*;
+public interface InterDate extends Remote
+{ public String display() throws Exception; }
+2.
+
+ServerDate.java import java.rmi.*; import java.rmi.server.*; import
+
+java.util.*; public class ServerDate extends UnicastRemoteObject implements
+InterDate { public ServerDate() throws Exception
+{}
+public String display() throws Exception
+{
+String str = "";
+Date d = new Date(); str =
+d.toString(); return str;
+}
+public static void main(String args[]) throws Exception {
+ServerDate s1 = new ServerDate();
+Naming.bind("DS",s1);
+System.out.println("Object registered....."); }
+}
+3. ClientDate.java
+import java.rmi.*; import
+java.io.*; public class
+ClientDate
+{ public static void main(String args[]) throws Exception {
+String s1;
+InterDate h1 = (InterDate)Naming.lookup("DS"); s1 =
+h1.display();
+System.out.println(s1);
+}
+}
+
+ Output:
+
+ Practical No. 3
+STEP 1: Open the VMware Workstation 10. Go to the File menu. Click on New Virtual Machine
+option.
+
+STEP 2: Click on “Typical” option button & click on Next.
+
+ STEP 3: Select the option button “I will install the operating system later” & click on Next.
+
+STEP 4: Select the Guest operating system as VMware ESXi & confirm the version should be VMware
+ESXi 5.
+
+ STEP 5: Give the Virtual machine name as VMware ESXi 5 & click on the browse for the location &
+create one separate directory for ESXi server in your folder & specify the path over here. Then click on
+Next.
+
+STEP 6: You have to specify the size of virtual hard-disk used for ESXi. By default it is 40 GB. Click
+on Next.
+
+ STEP 7: Then it will display the whole hardware information for VMware ESXi 5. Just click on Finish.
+
+STEP 8: Now ESXi server or ESXi operating system is properly installed on our virtualization layer &
+in the left tab of VMware, it will show VMware ESXi 5. Right click on VMware ESXi 5 & click on
+settings option.
+
+ STEP 9: The virtual machine settings will display, by default, memory 4 GB; Select the memory option
+& from the slider at the right side, make the memory as 2 GB.
+
+STEP 10: Click on processors. It will display you the number of processors as 2 & the number of core
+processors is 1, make it number of core processors as 2.
+
+ STEP 11: Click on CD/DVD SATA option & click on the option button “Use ISO image file” & then
+click on browse button & just select the ISO image of ESXi server “VMware-VMvisor-Installer5.1.0799733.x86_64.iso”. Then click on OK.
+
+ STEP 12: Now again right-click on VMware ESXi 5, click on settings option & click on CD/DVD
+option & click on advanced button. Select the Virtual device node as SATA & in the troubleshooting,
+click on Legacy emulation checkbox & then click on OK.
+
+ STEP 13: Make ESXi 5.0 Power On.
+
+STEP 14: Double click on VMware ESXi 5 to install it. It will load the ESXi installer.
+
+ STEP 15: It will load ESXi VMKernel & data disk.
+
+ STEP 16: After loading this, it will display the Welcome screen for ESXi installation. Click on (Enter)
+to continue.
+
+STEP 17: It will display End User License Agreement screen. Click on (F11) key to accept the license
+& continue.
+
+ STEP 18: It will display the screen for selecting the disk to install. Click on (Enter) to continue.
+
+STEP 19: It will display the screen for entering the password for root user. Just enter the password &
+remember the password for future use.
+
+ STEP 20: After entering the password, it will scan the system.
+
+STEP 21: After scanning, it will provide the window for Confirm install. Press (F11) to install. It will
+install the ESXi server.
+
+ STEP 22: Then it will ask for rebooting.
+
+  STEP 23: After rebooting the server, it will provide an ip-address through DHCP. Note down IP
+Address provided by DHCP.
+
+ Practical No. 4
+Aim :- Manage VMware ESXi with vCentre server.
+STEP 1: After rebooting the server, it will provide an ip-address through DHCP. Note down IP Address
+provided by DHCP.
+
+STEP 2: Open Browser & type respective IP Address. Click on I understand the Risks.
+
+ STEP 3: Click on Add Exception button. Click on Confirm Security Exception Button.
+
+STEP 4: Double click on vSphere client to download & then install.
+
+ STEP 5: Now vSphere client is saved in a respective directory. Just double click on vclient to install it.
+
+        STEP 6: Add iso image of winxp in datastore first.
+
+  STEP 7: Click on yes.
+
+       STEP 9: Click on Next and then Finish button.
+
+    STEP 11: Press ENTER.
+
+STEP 12: Press F8.
+
+ STEP 13: Press ENTER key.
+
+STEP 14: Press ENTER for formatting the partition.
+
+ STEP 15: Press any key.
+
+ STEP 16: Installing Devices.
+
+ STEP 17: Click Next.
+
+STEP 18: Type the Name and Click Next.
+
+ STEP 19: Enter product key.
+
+ STEP 20: Click next and type password.
+
+ STEP 21: Click Next.
+
+ STEP 22: After Click on Next.
+
+STEP 23: Press any Key.
+
+ STEP 24: Click OK.
+
+ STEP
+25: Click OK.
+
+STEP 26: Click NEXT Button.
+
+ STEP
+
+27: Click Next.
+
+STEP 28: Type Your Name and click Next.
+
+ STEP
+
+29: Click FINISH.
+
+ STEP
+
+   Practical No. 5
+Aim :- Implement XEN for server virtualization.
+STEP 1: Open the VMware Workstation 10. Go to the File menu. Click on New Virtual Machine
+option.
+
+STEP 2: Click on “Typical” option button & click on Next.
+
+ STEP 3: Select the option button “Installer disc image file (iso)” & click on Next.
+
+STEP 4: Select the Guest operating system as Other & confirm the version should be Other 64-bit.
+Then click on Next.
+
+  STEP 5: Give the Virtual machine name as Citrix XEN Server & click on the browse for the location &
+create one separate directory for Citrix XEN Server in your folder & specify the path over here. Then
+click on Next.
+
+ STEP 6: You have to specify the size of virtual hard-disk used for Citrix XEN Server. By default it is
+80 GB. Click on Next.
+
+STEP 7: Then it will display the whole hardware information for Citrix XEN Server. Click on
+Customize Hardware button.
+
+ STEP 8: The virtual machine settings will display, by default, memory 256 MB; Select the memory
+option & from the slider at the right side, make the memory as 2 GB. Then click on Close.
+
+STEP 9: Click on Finish.
+
+ STEP 10: Click on Citrix XEN Server and Power on this virtual machine.
+
+  STEP 11 Double click on Citrix XEN Server to install it. It will load the XEN installer.
+
+STEP 12: We begin by choosing the keymap.
+
+ :
+
+STEP 13: Assuming you have backed up your data or are doing an install to a fresh disk (or just don’t
+care about what’s on there), we hit OK.
+
+STEP 14: It will display End User License Agreement screen. Hit on Accept EULA.
+
+ STEP 15 Here we choose which disk to install to. In a similar way to ESXi, we don’t have the option
+of software RAID, so here we choose a single disk or available hardware RAID volume. Press space to
+select a drive. Since we are using a NFS datastore on the network to store virtual machines, this is OK.
+Moving on.
+
+STEP 16: Now we can key down to OK.
+
+ :
+
+STEP 17: We have the install media here so we will use the Local Media option.
+
+ STEP 18: If you have to ask what a Supplemental Pack is, you don’t have one. Select No. If you select
+Yes and don’t have one don’t worry, it won’t harm anything.
+
+STEP 19 You can Skip verification.
+
+ :
+
+STEP 20: It will display the screen for setting the password for root user. Just enter the password &
+confirm the password. Then hit on Ok.
+
+ :
+STEP 21 The motherboard we are installing to have two Ethernet ports, both of which are supported by
+XEN Server. Choose the one you wish to use for the management network – you can change this later.
+Here we get to choose the networking settings for our management network. This is the IP address used
+for logging in to manage the XEN Server.
+
+STEP 22: Next we choose the hostname and the DNS server settings – if you’re at home you likely use
+your gateway IP address.
+
+ :
+
+STEP 23 Pick your country name & then city name.
+
+ STEP 24: Now choose whether to set your time based on an NTP server or on your manual input.
+
+ :
+
+STEP 25 Hit on Install XenServer.
+
+STEP 26: It will show a progress bar so you can see where the install is up to. Once it has done, if you
+said you did have supplemental packs you should see.
+
+ STEP 27: Hit Ok to reboot.
+
+ :
+
+ STEP 28: The above is the loading screen for your new XenServer 6.2 install.
+
+STEP 29: Note down IP Address 192.168.232.129.This is the console screen for XenServer
+6.2.Installing virtual machine using XenCenter. Open Citrix XenCenter.
+
+ Practical No. 6
+Aim :- Manage XEN server XEN center.
+STEP 1: Now Install XEN Center by double clicking on XEN Center to install.
+
+STEP 2: It will display the Welcome screen for Citrix XenCenter installation. Click on Next.
+
+ STEP 3: Installing virtual machine using XenCenter. Click Next.
+
+   :
+STEP 4 Open Citrix XenCenter.
+
+STEP 5: Click on ADD a Server.
+
+STEP 6: Add new server window will popup. Now here enter all the details and click on Add.
+
+ :
+
+STEP 7 Click on Save and restore server connection state on startup. Click on Ok.
+
+STEP 8: Once server is added we will start will virtual machine deployment process.
+
+ STEP 9:
+First keep RedHat iso image in one folder; (example we are keeping h-rel62x6.iso RedHat iso image
+in Cloud SW folder). Right click on Cloud_SW folder. Click on specific people option from pop
+menu.
+
+STEP 10: It will give you “Choose people to share with” screen. Add Everyone.
+
+  STEP 11:
+
+Click on Add button. Give Read/Write permission to Everyone. Then Click on share button.
+
+ STEP 12
+
+: Share path is \\MSCIT-13-PC\Cloud SW. Note down this share path (in place of pc name we
+can give ip address of machine also). Click on Done.
+
+ STEP 13:
+First we need to create a storage repository where we will store all the iso images of virtual
+machine. So for that click on “New Storage” (i.e. Our Own storage for Red hat Linux iso).
+
+058
+STEP 14: Select Windows File Sharing (CIFS) option, and then click on Next.
+
+ :
+
+STEP 15: In Name, give any name of your choice.
+
+ STEP 16 In Location, give the path of the shared folder which contains all the images of virtual machine
+& Click Finish.
+
+STEP 17: Now we have new storage in which we have all the iso files required for installation of VMs.
+So let’s create new virtual machine. For that click on New VM.
+
+ STEP 18: In template field select the name of the virtual machine you want to install. Then in name field
+provide name of the virtual machine of your choice.
+
+ STEP 19 In the Installation Media field select the iso image of the VM from the storage repository we
+created earlier. Click Next.
+
+ STEP 20: Keep Home Server field unchanged and click Next.
+
+ STEP 21 Provide CPU & Memory details. Click Next.
+
+STEP 22: Provide the Storage for VM.
+
+ Click on Add button.
+
+Click Next.
+
+ Keep networking field as default and then click on Create Now.
+
+ STEP 26: Once created it will automatically power on.
+
+ STEP 27 Click on console Tab & then click on start to start RedHat Linux.
+
+ Practical No. 7
+Aim: Native Virtualization using Hyper-V.
+HYPER-V
+Hyper-V, codenamed Viridia and formerly known as Windows Server Virtualization,
+is a native hypervisor; it can create virtual machines on x86-64 systems. Starting with
+Windows 8, Hyper-V supersedes Windows Virtual PC as the hardware virtualization
+component of the client editions of Windows NT.
+A host server running Hyper-V could be accessed remotely by multiple guest computers.
+Each guest computer could perform as if they are using the host server directly. Users on the
+guest computers could run applications in the host server remotely, even though that application
+is not available on the guest computer.
+A beta version of Hyper-V was shipped with certain x86-64 editions of Windows
+Server 2008, and a finalized version (automatically updated through Windows Update) was
+released on June 26, 2008.[7] Hyper-V has since been released in a free stand-alone version, and
+has been upgraded to Release 2 (R2) status.[8][9] It was updated in Windows Server 2012.[10]
+The stand-alone Hyper-V Server variant does not require an existing installation of
+Windows Server 2008 nor Windows Server 2008 R2. Microsoft Hyper-V server is built with
+components of Windows and has a Windows Server Core user experience System
+requirements of Microsoft Hyper-V server are the same for supported guest operating systems
+and processor, but differ in the following:
+RAM: Minimum: 1 GB RAM; Recommended: 2 GB RAM or greater; Maximum 1 TB.
+Available disk space: Minimum: 8 GB; Recommended: 20 GB or greater.
+
+1. Click on server Manager
+
+ 2.
+
+3.
+
+4. Click on Mange -> Add Roles and features
+
+ 5. Click Next
+
+6. Click Next
+
+7. Select the server from the sever pool
+
+ 8. Select Hyper-V
+
+ 9. Click on Add features button
+
+10. Click Next
+
+11. Click Next
+
+ 12. Click Next
+
+13. Check the Ethernet and Click Next
+
+14. Click Next
+
+ 15. Select the destination Folder where you would like to install new virtual machine-> Click
+Next
+
+16. Click Install
+
+17.
+
+ 18. Installation Complete --> Click Close
+
+19.
+
+ 20. Go to Tools->HyperVManager
+
+21. Still no Virtual Machine is installed on hyper-v
+
+ 22. Right Click on WIN-HLQ7SBJVE38 under Hyper-v Manager -> Click New ->Virtual
+Machine
+
+23. Click Next
+
+24. Type the name of VM and select the path of hyper-v
+
+ 25. Click Next
+
+26. Set the memory as 1024MB
+
+27. Select the Connection as Shown:
+
+ 28. Set the size 50GB and click next
+
+ 30. Click on browse n select d path for iso image of xp.
+
+31. Click Next
+
+ 32. Click Finish
+
+33. As you click on Finish.
+
+34.
+
+35. Right Click on winxp-> Start
+
+ 36. Double Click on winxp VM
+
+ 37. After double click on winxpvm -> the following screen will appear ->
+
+38. Press ENTER
+
+39. Press F8
+
+ 40. Press ENTER key
+
+41. Press ENTER for formatting the partition
+
+ 42. Press any key
+
+44. Installing Devices
+
+ 45. Click Next
+
+46. Type the Name and Click Next
+
+47.
+
+ 48. Enter product key
+
+49. Click next and type password
+
+50. Click Next
+
+ 51. After Click on Next
+
+52. Press any Key
+
+ 54. Click OK
+
+55. Click OK
+
+ 57. Click NEXT Button
+
+58. Click Next
+
+59. Type Your Name and click next
+
+ 60. Click FINISH
+
+62.
+
+   
